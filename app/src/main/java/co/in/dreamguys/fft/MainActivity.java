@@ -1,9 +1,10 @@
 package co.in.dreamguys.fft;
 
+import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,8 +29,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                insertEvents();
             }
         });
 
@@ -40,6 +41,23 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void insertEvents() {
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(2017, 0, 19, 7, 25);
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(2017, 0, 19, 8, 26);
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                .putExtra(CalendarContract.Events.TITLE, "Test Application")
+                .putExtra(CalendarContract.Events.DESCRIPTION, "This is sample event from android")
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, "office")
+                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_FREE)
+                .putExtra(Intent.EXTRA_EMAIL, "vijay.a@dreamguys.co.in");
+        startActivity(intent);
     }
 
     @Override
